@@ -39,14 +39,14 @@ func printScreens(screens []core.Screen, servers []core.Screen, config util.Conf
 		"Server Manager v." + VERSION,
 		"\n(c) Ringo Hoffmann (zekro Development)",
 		"\n\nServer Location: " + config.ServerLocation,
-	    "\nBackup Location: " + config.BackupLocation + "\n\n")
-	for i, s := range servers {
+		"\nBackup Location: " + config.BackupLocation + "\n\n")
+	for _, s := range servers {
 		onof := Brown("[STOPPED]")
 		if core.SliceContainsServer(screens, s) {
 			onof = Green("[RUNNING]")
 		}
 		fmt.Printf("%s %s %s\n", 
-			Blue("[" + Itoa(i) + "]"), onof, s.Name)
+			Blue("[" + Itoa(s.Uid) + "]"), onof, s.Name)
 	}
 	return cinpt("\n> ")
 }

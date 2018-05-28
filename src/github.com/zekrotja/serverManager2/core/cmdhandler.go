@@ -4,6 +4,8 @@ import (
 	"os"
 	"bufio"
 	"fmt"
+	. "strings"
+	. "strconv"
 	"github.com/zekrotja/serverManager2/util"
 )
 
@@ -23,6 +25,24 @@ func printHelp() {
 		"\n backup <index/name>      | Start backup manager for specific server",
 		"\n exit                     | Exit the program")
 	pause()
+}
+
+func fetchServer(servers []Screen, invoke string) Screen {
+	invoke = ToLower(invoke)
+	for _, e := range servers {
+		invokei, err := Atoi(invoke)
+		if err == nil && e.Uid == invokei {
+			return e
+		} else if ToLower(e.Name) == invoke {
+			return e
+		}
+	}
+	for _, e := range servers {
+		if HasPrefix(ToLower(e.Name), invoke) {
+			return e
+		}
+	}
+	return Screen {}
 }
 
 func HandleCmd(cmd string, screens []Screen, servers []Screen, config util.Conf ) {

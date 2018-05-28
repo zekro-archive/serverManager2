@@ -62,8 +62,11 @@ func SliceContainsServer(slc []Screen, server Screen) bool {
 
 // SCREEN ACTION FUNCTIONS
 
-func StartScreen(screen Screen, screens []Screen, servers []Screen, config util.Conf) {
-
+func StartScreen(screen Screen, screens []Screen, config util.Conf) {
+	if !SliceContainsServer(screens, screen) {
+		util.LogError("Screen '" + screen.Name + "' is still running!")
+		pause()
+	}
 }
 
 func StopScreen(screen Screen, screens []Screen, config util.Conf) {
