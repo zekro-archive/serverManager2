@@ -46,8 +46,32 @@ func fetchServer(servers []Screen, invoke string) Screen {
 }
 
 func HandleCmd(cmd string, screens []Screen, servers []Screen, config util.Conf ) {
-	switch cmd {
-	case "help":
-		printHelp()
+	cmdsplit := Split(cmd, " ")
+	invoke := cmdsplit[0]
+	args := cmdsplit[1:]
+
+	switch len(args) {
+
+	case 0:
+		switch invoke {
+		case "help":
+			printHelp()
+		}
+
+	default:
+		server := fetchServer(servers, args[0])
+		if server == (Screen {}) {
+			util.LogError("Can not fetch '" + args[0] + "' to any server")
+			return
+		}
+		switch invoke {
+		case "start":
+			endless := (len(args) > 1 && args[1] == "e")
+			StartScreen(server, screens, config, endless)
+		case "stop":
+			StopScreen(server, screens, config)
+		case "resume":
+			ResumeScreen(server, screens, config)
+		}
 	}
 }

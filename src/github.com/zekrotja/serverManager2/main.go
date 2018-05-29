@@ -34,7 +34,7 @@ func cls() {
 }
 
 func printScreens(screens []core.Screen, servers []core.Screen, config util.Conf) string {
-	cls()
+	//cls()
 	fmt.Println(
 		"Server Manager v." + VERSION,
 		"\n(c) Ringo Hoffmann (zekro Development)",
@@ -54,11 +54,12 @@ func printScreens(screens []core.Screen, servers []core.Screen, config util.Conf
 func main() {
 	config := util.GetConf()
 
-	screens := core.GetRunningScreens()
-	servers := core.GetServers(config.ServerLocation)
+	var screens, servers []core.Screen
 
 	res := ""
 	for res != "exit" {
+		screens = core.GetRunningScreens()
+		servers = core.GetServers(config.ServerLocation)
 		res = printScreens(screens, servers, config)
 		core.HandleCmd(res, screens, servers, config)
 	}

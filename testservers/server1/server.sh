@@ -1,4 +1,4 @@
 while true; do
-    echo test
+    echo "hello"
     sleep 1
 done
