@@ -48,7 +48,7 @@ exit | Exit the tool | Yes
 - [ ] Started Before Timestamp
 - [ ] Restart command
 - [ ] Backup System
-- [ ] Static Config + Config Editor / Setup menu setting up Config on Startup
+- [x] Static Config + Config Editor / Setup menu setting up Config on Startup
 - [x] Start Command
 - [x] Stop Command
 - [x] Resume Command
