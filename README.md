@@ -52,4 +52,14 @@ exit | Exit the tool | Yes
 - [x] Stop Command
 - [x] Resume Command
 - [x] Help Command
-- [x]
+
+---
+
+# Used 3rd-Party-Packages
+
+- [Aurora](https://github.com/logrusorgru/aurora) by logrusorgru
+
+---
+
+© 2018 - present Ringo Hoffmann (zekro Development)  
+contact[at]zekro.de | https://zekro.de
