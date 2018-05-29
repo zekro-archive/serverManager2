@@ -3,12 +3,13 @@ package util
 import (
 	"encoding/json"
 	"os"
-	_ "fmt"
+	"fmt"
+	. "strings"
 	"io/ioutil"
 )
 
 
-const CONFFILE = "config.json"
+const CONFFILE = "/etc/servermanager/config.json"
 
 
 type Conf struct {
@@ -19,25 +20,37 @@ type Conf struct {
 func GetConf() Conf {
 	f, err := os.Open(CONFFILE)
 	if os.IsNotExist(err) {
-		CreateConf()
-		LogWarn("config file was not existent and was created now.\nPlease enter preferences in the config file and restart.")
-		os.Exit(0)
+		return CreateConf(Conf {"", ""})
 	} else if err != nil {
 		LogFatal("Failed reading config file:\n" + err.Error())
 	}
 	defer f.Close()
 
 	decoder := json.NewDecoder(f)
+	fmt.Println("CONFIG READ")
 	config := Conf {}
 	decoder.Decode(&config)
 	return config
 }
 
-func CreateConf() {
-	stdConf := Conf {"", ""}
-	bjson, _ := json.MarshalIndent(stdConf, "", "  ")
-	err := ioutil.WriteFile(CONFFILE, bjson, 0644)
+func CreateConf(current Conf) Conf {
+	Cls()
+	fmt.Printf("\nCONFIG EDITOR\n\nPlease only use total paths!\n\n")
+	inptconf := Conf {
+		Cinpt("serverLocation (current \"" + current.ServerLocation + "\"):\n> "), 
+		Cinpt("backupLocation: (current \"" + current.BackupLocation + "\"):\n> ")}
+
+	bjson, _ := json.MarshalIndent(inptconf, "", "  ")
+
+	pathsplit := Split(CONFFILE, "/")
+	path := Join(pathsplit[0:len(pathsplit)-1], "/")
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		os.MkdirAll(path, os.ModePerm)
+	}
+	err = ioutil.WriteFile(CONFFILE, bjson, 0644)
 	if err != nil {
 		LogFatal("Failed creating config file:\n" + err.Error())
 	}
+	return inptconf
 }

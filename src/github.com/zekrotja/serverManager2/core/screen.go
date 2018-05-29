@@ -116,3 +116,7 @@ func ResumeScreen(screen Screen, screens []Screen, config util.Conf) {
 	cmd.Stdin = os.Stdin
 	cmd.Run()
 }
+
+func RestartScreen(screen Screen, screens []Screen, config util.Conf, runInLoop bool) {
+
+}

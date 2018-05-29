@@ -23,7 +23,9 @@ func printHelp() {
 		"\n restart <index/name> [e] | Restart a server",
 		"\n                          | Use 'e' as argument as same as with the start cmd",
 		"\n backup <index/name>      | Start backup manager for specific server",
-		"\n exit                     | Exit the program")
+		"\n config                   | Edit config of the program",
+		"\n exit                     | Exit the program",
+		"\n\nConfig File Location: " + util.CONFFILE + "\n")
 	pause()
 }
 
@@ -45,7 +47,7 @@ func fetchServer(servers []Screen, invoke string) Screen {
 	return Screen {}
 }
 
-func HandleCmd(cmd string, screens []Screen, servers []Screen, config util.Conf ) {
+func HandleCmd(cmd string, screens []Screen, servers []Screen, config *util.Conf ) {
 	cmdsplit := Split(cmd, " ")
 	invoke := cmdsplit[0]
 	args := cmdsplit[1:]
@@ -56,6 +58,8 @@ func HandleCmd(cmd string, screens []Screen, servers []Screen, config util.Conf 
 		switch invoke {
 		case "help":
 			printHelp()
+		case "config":
+			*config = util.CreateConf(*config)
 		}
 
 	default:
@@ -67,11 +71,14 @@ func HandleCmd(cmd string, screens []Screen, servers []Screen, config util.Conf 
 		switch invoke {
 		case "start":
 			endless := (len(args) > 1 && args[1] == "e")
-			StartScreen(server, screens, config, endless)
+			StartScreen(server, screens, *config, endless)
 		case "stop":
-			StopScreen(server, screens, config)
+			StopScreen(server, screens, *config)
 		case "resume":
-			ResumeScreen(server, screens, config)
+			ResumeScreen(server, screens, *config)
+		case "restart":
+			endless := (len(args) > 1 && args[1] == "e")
+			RestartScreen(server, screens, *config, endless)
 		}
 	}
 }
