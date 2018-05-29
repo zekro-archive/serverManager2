@@ -45,6 +45,7 @@ exit | Exit the tool | Yes
 
 # To do
 
+- [ ] Exclude folders as servers beginnign with `_` or `.`
 - [ ] Started Before Timestamp
 - [ ] Restart command
 - [ ] Backup System
