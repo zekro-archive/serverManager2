@@ -38,6 +38,7 @@ stop `<index/name>` | Stop a currently running server by name or index | Yes
 resume `<index/name>` | Resume a started screen session by name or index | Yes
 restart `<index/name>` `[e]` | Restart a server by name or index | WIP
 backup `<index/name>` | Open backup manager for server by name or index | Not yet
+config | edit the config of the program | Yes
 exit | Exit the tool | Yes
 
 ---
