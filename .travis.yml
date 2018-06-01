@@ -3,7 +3,9 @@ go:
 - master
 script:
 - go build -o bin/test ./main.go
+
 deploy:
+  skip_cleanup: true
   provider: releases
   api_key:
     secure: GS7F/neSnlfRDEifHalTfpuRoNuPfM+6rGf8l3XXfPO9h4ApXSWhEk7E+fBzuwXFv6yxF2G9lFMuoXT0+/YfH6G4QlsF0puGJKO7lsJGT615UoofiMVh62xX+jsvygr6/5vAoO4QJEb7Fprm41yL3QixCfc112zK9cOzzCbzQQfL0TsYnJdQ6814jKIjEwMHK0M5r4r6aiHkD5/TwrrPwwDNjZ54gL3bKrx+MTtGnxbsDDWdsggCTnMEOsnliIhrEv67AqmFNXKaQlkSpMoV6OQejIl84AAoRd77YXbjAp2wpFyMMqRyrty0jhtaVtDKfuklRA+Cx9cx1CeZfVs/eV585h0CYh+nGvpNXLjzeiOaWAy25C2THR3ol6dLC29r/OGYaVoZxHTQDq2nMKsOqXwbiFzuFrL6pioy7wyFMHoKIGGnVTs4oXJ+O6ITqHQGPu2ttv1K3xPt4h+q1B7r6EXea7DqaRVL7PaynMxxE2NNLj7ind4+R8fVoZvdrEUISFjYyQiob1rmHPOl8xVXF7V39GHACLBb9hJkiDZICUmmDZpuhxe5ZF2baocRyBGcQJYUl9k4tZC2xWJ77Kxs3B2WdzkMhDtCHr/VDzY0Rfd7bgv+iXestzNyR8U5+knzXhlmb/Xc7GjBYvyXP3+MShr6Oxq9BgmTLR7K/bqE3+o=
