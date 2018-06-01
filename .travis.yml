@@ -12,3 +12,4 @@ deploy:
   file: bin/build
   on:
     branch: deploy
+    tags: true
