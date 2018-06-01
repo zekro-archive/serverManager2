@@ -27,7 +27,6 @@ func GetConf() Conf {
 	defer f.Close()
 
 	decoder := json.NewDecoder(f)
-	fmt.Println("CONFIG READ")
 	config := Conf {}
 	decoder.Decode(&config)
 	return config

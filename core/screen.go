@@ -51,19 +51,19 @@ func GetServers(location string) []Screen {
 	return screens
 }
 
-func SliceContainsServer(slc []Screen, server Screen) bool {
+func SliceContainsServer(slc []Screen, server Screen) (bool, Screen) {
 	for _, e := range slc {
 		if e.Name == server.Name {
-			return true
+			return true, e
 		}
 	}
-	return false
+	return false, Screen {}
 }
 
 // SCREEN ACTION FUNCTIONS
 
 func StartScreen(screen Screen, screens []Screen, config util.Conf, runInLoop bool) {
-	if SliceContainsServer(screens, screen) {
+	if ok, _ := SliceContainsServer(screens, screen); ok {
 		util.LogError("Screen '" + screen.Name + "' is still running!")
 		pause()
 		return
@@ -95,7 +95,7 @@ func StartScreen(screen Screen, screens []Screen, config util.Conf, runInLoop bo
 }
 
 func StopScreen(screen Screen, screens []Screen, config util.Conf) {
-	if !SliceContainsServer(screens, screen) {
+	if ok, _ := SliceContainsServer(screens, screen); !ok {
 		util.LogError("Screen '" + screen.Name + "' is not running!")
 		pause()
 		return
@@ -105,7 +105,7 @@ func StopScreen(screen Screen, screens []Screen, config util.Conf) {
 }
 
 func ResumeScreen(screen Screen, screens []Screen, config util.Conf) {
-	if !SliceContainsServer(screens, screen) {
+	if ok, _ := SliceContainsServer(screens, screen); !ok {
 		util.LogError("Screen '" + screen.Name + "' is not running!")
 		pause()
 		return
