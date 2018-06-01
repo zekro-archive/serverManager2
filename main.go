@@ -11,13 +11,12 @@ import (
 
 
 const (
-	VERSION = "2.2.0"
+	VERSION = "2.3.0"
 )
 
 func getRunningSince(timestr string) string {
-	started, _ := time.Parse("01/02/06 15:04:05", timestr)
-	sub := time.Since(started)
-	rsecs := sub.Seconds()
+	started, _ := time.ParseInLocation("01/02/06 15:04:05", timestr, time.Now().Location())
+	rsecs := time.Since(started).Seconds()
 	days :=  int(rsecs / 86400)
 	hours := int(rsecs) % 86400 / 3600
 	mins :=  int(rsecs) % 86400 % 3600 / 60
