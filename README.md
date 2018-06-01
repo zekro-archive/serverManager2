@@ -38,16 +38,18 @@ stop `<index/name>` | Stop a currently running server by name or index | Yes
 resume `<index/name>` | Resume a started screen session by name or index | Yes
 restart `<index/name>` `[e]` | Restart a server by name or index | WIP
 backup `<index/name>` | Open backup manager for server by name or index | Not yet
+config | edit the config of the program | Yes
 exit | Exit the tool | Yes
 
 ---
 
 # To do
 
+- [ ] Exclude folders as servers beginnign with `_` or `.`
 - [ ] Started Before Timestamp
 - [ ] Restart command
 - [ ] Backup System
-- [ ] Static Config + Config Editor / Setup menu setting up Config on Startup
+- [x] Static Config + Config Editor / Setup menu setting up Config on Startup
 - [x] Start Command
 - [x] Stop Command
 - [x] Resume Command
