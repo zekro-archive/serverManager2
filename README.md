@@ -1,6 +1,7 @@
  <div align="center">
      <h1>~ ServerManager2 ~</h1>
      <strong>faster, harder, stronger</strong><br><br>
+     <a href="https://travis-ci.org/zekroTJA/serverManager2"><img src="https://travis-ci.org/zekroTJA/serverManager2.svg?branch=master"/></a>
  </div>
 
 ---
