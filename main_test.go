@@ -6,10 +6,10 @@ import (
 	"github.com/zekroTJA/serverManager2/core"
 )
 
-func TestConfig(t *testing.T) {
-	conf := util.GetConf()
-	util.CreateConf(conf)
-}
+// func TestConfig(t *testing.T) {
+// 	conf := util.GetConf()
+// 	util.CreateConf(conf)
+// }
 
 func TestLogger(t *testing.T) {
 	util.LogInfo("test")
