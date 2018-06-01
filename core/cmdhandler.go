@@ -6,7 +6,7 @@ import (
 	"fmt"
 	. "strings"
 	. "strconv"
-	"github.com/zekrotja/serverManager2/util"
+	"github.com/zekroTJA/serverManager2/util"
 )
 
 func pause() {

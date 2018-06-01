@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"regexp"
-	"github.com/zekrotja/serverManager2/util"
+	"github.com/zekroTJA/serverManager2/util"
 	"path/filepath"
 )
 

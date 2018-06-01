@@ -4,8 +4,8 @@ import (
     "fmt"
 	. "strconv"
 	. "github.com/logrusorgru/aurora"
-	"github.com/zekrotja/serverManager2/util"
-	"github.com/zekrotja/serverManager2/core"
+	"github.com/zekroTJA/serverManager2/util"
+	"github.com/zekroTJA/serverManager2/core"
 )
 
 
