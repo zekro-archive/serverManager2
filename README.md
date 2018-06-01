@@ -2,6 +2,7 @@
      <h1>~ ServerManager2 ~</h1>
      <strong>faster, harder, stronger</strong><br><br>
      <a href="https://travis-ci.org/zekroTJA/serverManager2"><img src="https://travis-ci.org/zekroTJA/serverManager2.svg?branch=master"/></a>
+     <a href="https://github.com/zekroTJA/serverManager2/releases"><img src="https://img.shields.io/github/release/qubyte/rubidium/all.svg"/></a>
  </div>
 
 ---
