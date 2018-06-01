@@ -16,7 +16,7 @@ type Screen struct {
 	Id, Name, Started string
 }
 
-func GetRunningScreens() []Screen {
+func GetRunningScreens() *[]Screen {
 	out, _ := exec.Command("screen", "-ls").Output()
 	outsplit := strings.Split(string(out), "\n")
 	regex := regexp.MustCompile(`[()]`)
@@ -33,10 +33,10 @@ func GetRunningScreens() []Screen {
 		})
 	}
 
-	return screens
+	return &screens
 }
 
-func GetServers(location string) []Screen {
+func GetServers(location string) *[]Screen {
 	screens := []Screen {}
 	filepath.Walk(location, func(path string, info os.FileInfo, err error) error {
 		folder := strings.Replace(path, location, "", -1)
@@ -48,16 +48,16 @@ func GetServers(location string) []Screen {
 		}
 		return err
 	})
-	return screens
+	return &screens
 }
 
-func SliceContainsServer(slc []Screen, server Screen) (bool, Screen) {
-	for _, e := range slc {
+func SliceContainsServer(slc *[]Screen, server *Screen) (bool, *Screen) {
+	for _, e := range *slc {
 		if e.Name == server.Name {
-			return true, e
+			return true, &e
 		}
 	}
-	return false, Screen {}
+	return false, &Screen {}
 }
 
 func createRunnerFile() {
@@ -86,7 +86,7 @@ func getStartFile(serverLocation, screenName string) (bool, string) {
 
 // SCREEN ACTION FUNCTIONS
 
-func StartScreen(screen Screen, screens []Screen, config util.Conf, runInLoop bool) {
+func StartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop bool) {
 	if ok, _ := SliceContainsServer(screens, screen); ok {
 		util.LogError("Screen '" + screen.Name + "' is still running!")
 		pause()
@@ -106,7 +106,7 @@ func StartScreen(screen Screen, screens []Screen, config util.Conf, runInLoop bo
 	}
 }
 
-func StopScreen(screen Screen, screens []Screen, config util.Conf) {
+func StopScreen(screen *Screen, screens *[]Screen, config *util.Conf) {
 	if ok, _ := SliceContainsServer(screens, screen); !ok {
 		util.LogError("Screen '" + screen.Name + "' is not running!")
 		pause()
@@ -116,7 +116,7 @@ func StopScreen(screen Screen, screens []Screen, config util.Conf) {
 	exec.Command("screen", "-XS", screen.Name, "quit").Run()
 }
 
-func ResumeScreen(screen Screen, screens []Screen, config util.Conf) {
+func ResumeScreen(screen *Screen, screens *[]Screen, config *util.Conf) {
 	if ok, _ := SliceContainsServer(screens, screen); !ok {
 		util.LogError("Screen '" + screen.Name + "' is not running!")
 		pause()
@@ -129,12 +129,12 @@ func ResumeScreen(screen Screen, screens []Screen, config util.Conf) {
 	cmd.Run()
 }
 
-func RestartScreen(screen Screen, screens []Screen, config util.Conf, runInLoop bool) {
+func RestartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop bool) {
 	ok, startfile := getStartFile(config.ServerLocation, screen.Name)
 	if !ok {
 		return
 	}
-	
+
 	if ok, _ := SliceContainsServer(screens, screen); ok {
 		exec.Command("screen", "-XS", screen.Name, "quit").Run()
 	}

@@ -24,16 +24,16 @@ func getRunningSince(timestr string) string {
 }
 
 
-func printScreens(screens []core.Screen, servers []core.Screen, config util.Conf) string {
+func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.Conf) string {
 	util.Cls()
 	fmt.Println(
 		"Server Manager v." + VERSION,
 		"\n(c) Ringo Hoffmann (zekro Development)",
 		"\n\nServer Location: " + config.ServerLocation,
 		"\nBackup Location: " + config.BackupLocation + "\n\n")
-	for _, s := range servers {
+	for _, s := range *servers {
 		onof := Brown("[ STOPPED ]")
-		if ok, sc := core.SliceContainsServer(screens, s); ok {
+		if ok, sc := core.SliceContainsServer(screens, &s); ok {
 			onof = Green(getRunningSince(sc.Started))
 		}
 		fmt.Printf("%s %s %s\n", 
@@ -46,13 +46,13 @@ func printScreens(screens []core.Screen, servers []core.Screen, config util.Conf
 func main() {
 	config := util.GetConf()
 
-	var screens, servers []core.Screen
+	var screens, servers *[]core.Screen
 
 	res := ""
 	for res != "exit" {
 		screens = core.GetRunningScreens()
 		servers = core.GetServers(config.ServerLocation)
 		res = printScreens(screens, servers, config)
-		core.HandleCmd(res, screens, servers, &config)
+		core.HandleCmd(res, screens, servers, config)
 	}
 }

@@ -29,25 +29,25 @@ func printHelp() {
 	pause()
 }
 
-func fetchServer(servers []Screen, invoke string) Screen {
+func fetchServer(servers *[]Screen, invoke string) *Screen {
 	invoke = ToLower(invoke)
-	for _, e := range servers {
+	for _, e := range *servers {
 		invokei, err := Atoi(invoke)
 		if err == nil && e.Uid == invokei {
-			return e
+			return &e
 		} else if ToLower(e.Name) == invoke {
-			return e
+			return &e
 		}
 	}
-	for _, e := range servers {
+	for _, e := range *servers {
 		if HasPrefix(ToLower(e.Name), invoke) {
-			return e
+			return &e
 		}
 	}
-	return Screen {}
+	return &Screen {}
 }
 
-func HandleCmd(cmd string, screens []Screen, servers []Screen, config *util.Conf ) {
+func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Conf ) {
 	cmdsplit := Split(cmd, " ")
 	invoke := cmdsplit[0]
 	args := cmdsplit[1:]
@@ -59,26 +59,26 @@ func HandleCmd(cmd string, screens []Screen, servers []Screen, config *util.Conf
 		case "help":
 			printHelp()
 		case "config":
-			*config = util.CreateConf(*config)
+			config = util.CreateConf(config)
 		}
 
 	default:
 		server := fetchServer(servers, args[0])
-		if server == (Screen {}) {
+		if server == (&Screen {}) {
 			util.LogError("Can not fetch '" + args[0] + "' to any server")
 			return
 		}
 		switch invoke {
 		case "start":
 			endless := (len(args) > 1 && args[1] == "e")
-			StartScreen(server, screens, *config, endless)
+			StartScreen(server, screens, config, endless)
 		case "stop":
-			StopScreen(server, screens, *config)
+			StopScreen(server, screens, config)
 		case "resume":
-			ResumeScreen(server, screens, *config)
+			ResumeScreen(server, screens, config)
 		case "restart":
 			endless := (len(args) > 1 && args[1] == "e")
-			RestartScreen(server, screens, *config, endless)
+			RestartScreen(server, screens, config, endless)
 		}
 	}
 }

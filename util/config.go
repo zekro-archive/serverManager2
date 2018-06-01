@@ -17,10 +17,10 @@ type Conf struct {
 	BackupLocation string `json:"backupLocation"`
 }
 
-func GetConf() Conf {
+func GetConf() *Conf {
 	f, err := os.Open(CONFFILE)
 	if os.IsNotExist(err) {
-		return CreateConf(Conf {"", ""})
+		return CreateConf(&Conf {"", ""})
 	} else if err != nil {
 		LogFatal("Failed reading config file:\n" + err.Error())
 	}
@@ -29,10 +29,10 @@ func GetConf() Conf {
 	decoder := json.NewDecoder(f)
 	config := Conf {}
 	decoder.Decode(&config)
-	return config
+	return &config
 }
 
-func CreateConf(current Conf) Conf {
+func CreateConf(current *Conf) *Conf {
 	Cls()
 	fmt.Printf("\nCONFIG EDITOR\n\nPlease only use total paths!\n\n")
 	inptconf := Conf {
@@ -51,5 +51,5 @@ func CreateConf(current Conf) Conf {
 	if err != nil {
 		LogFatal("Failed creating config file:\n" + err.Error())
 	}
-	return inptconf
+	return &inptconf
 }
