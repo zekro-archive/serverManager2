@@ -2,7 +2,7 @@ language: go
 go:
 - master
 script:
-- go build -o bin/test ./main.go
+- go build -o bin/build ./main.go
 
 deploy:
   skip_cleanup: true
