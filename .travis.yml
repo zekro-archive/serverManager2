@@ -1,8 +1,16 @@
 language: go
+
 go:
-- master
+- tip
+
 script:
 - go build -o bin/build ./main.go
+- $HOME/gopath/bin/goveralls -service=travis-ci
+
+before_install:
+- go get github.com/axw/gocov/gocov
+- go get github.com/mattn/goveralls
+- go get golang.org/x/tools/cmd/cover
 
 deploy:
   skip_cleanup: true
