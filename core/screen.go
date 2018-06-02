@@ -44,9 +44,11 @@ func GetServers(location string) *[]Screen {
 	filepath.Walk(location, func(path string, info os.FileInfo, err error) error {
 		folder := strings.Replace(path, location, "", -1)
 		if len(strings.Split(folder, "/")) == 2 {
-			screens = append(screens, Screen {
-				Uid: len(screens),
-				Name: folder[1:] })
+			if !strings.HasPrefix(folder, "/.") && !strings.HasPrefix(folder, "/_") {
+				screens = append(screens, Screen {
+					Uid: len(screens),
+					Name: folder[1:] })
+			}
 		}
 		return err
 	})
