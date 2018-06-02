@@ -59,7 +59,7 @@ func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Co
 		case "help":
 			printHelp()
 		case "config":
-			config = util.CreateConf(config)
+			util.CreateConf(config)
 		}
 
 	default:

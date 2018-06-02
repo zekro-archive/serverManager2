@@ -22,15 +22,18 @@ func GetRunningScreens() *[]Screen {
 	regex := regexp.MustCompile(`[()]`)
 	
 	screens := []Screen {}
-	for i, e := range outsplit[1:len(outsplit)-3]  {
-		fields := strings.Fields(e)
-		nameandid := strings.Split(fields[0], ".")
-		screens = append(screens, Screen {
-			i, 
-			nameandid[0], 
-			nameandid[1], 
-			regex.ReplaceAllString(fields[1] + " " +  fields[2], ""),
-		})
+
+	if len(outsplit) > 3 {
+		for i, e := range outsplit[1:len(outsplit)-3]  {
+			fields := strings.Fields(e)
+			nameandid := strings.Split(fields[0], ".")
+			screens = append(screens, Screen {
+				i, 
+				nameandid[0], 
+				nameandid[1], 
+				regex.ReplaceAllString(fields[1] + " " +  fields[2], ""),
+			})
+		}
 	}
 
 	return &screens
@@ -40,8 +43,7 @@ func GetServers(location string) *[]Screen {
 	screens := []Screen {}
 	filepath.Walk(location, func(path string, info os.FileInfo, err error) error {
 		folder := strings.Replace(path, location, "", -1)
-		pathsplit := strings.Split(folder, "/")
-		if len(pathsplit) == 2 {
+		if len(strings.Split(folder, "/")) == 2 {
 			screens = append(screens, Screen {
 				Uid: len(screens),
 				Name: folder[1:] })
@@ -93,16 +95,19 @@ func StartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop
 		return
 	}
 
+	location := config.ServerLocation + "/" + screen.Name
 	ok, startfile := getStartFile(config.ServerLocation, screen.Name)
 	if !ok {
 		return
 	}
 
 	if runInLoop {
+		// TODO: Endless mode need to be updated that runner file will be created in servers
+		//       location and path needs to be passed and cd into it.
 		createRunnerFile()
-		exec.Command("screen", "-dmLS", screen.Name, "bash", ".runner", startfile).Run()
+		exec.Command("screen", "-dmLS", screen.Name, "bash", ".runner", startfile, location).Run()
 	} else {
-		exec.Command("screen", "-dmS", screen.Name, "bash", startfile).Run()
+		exec.Command("screen", "-dmS", screen.Name, "bash", startfile, location).Run()
 	}
 }
 
