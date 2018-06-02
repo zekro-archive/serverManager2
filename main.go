@@ -36,8 +36,14 @@ func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.C
 		if ok, sc := core.SliceContainsServer(screens, &s); ok {
 			onof = Green(getRunningSince(sc.Started))
 		}
+		index := func()string {
+			if s.Uid < 10 {
+				return "0" + Itoa(s.Uid)
+			}
+			return Itoa(s.Uid)
+		}()
 		fmt.Printf("%s %s %s\n", 
-			Blue("[" + Itoa(s.Uid) + "]"), onof, s.Name)
+			Blue("[" + index + "]"), onof, s.Name)
 		
 	}
 	return util.Cinpt("\n> ")
