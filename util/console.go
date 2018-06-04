@@ -22,3 +22,7 @@ func Cinpt(msg string) string {
 	}
 	return text[0:len(text)-1]
 }
+
+func Pause() {
+	bufio.NewReader(os.Stdin).ReadString('\n')
+}

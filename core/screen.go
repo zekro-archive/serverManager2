@@ -8,8 +8,8 @@ import (
 	"strings"
 	"regexp"
 	"time"
-	"github.com/zekroTJA/serverManager2/util"
 	"path/filepath"
+	"github.com/zekroTJA/serverManager2/util"
 )
 
 var LogLocation = "/etc/servermanager/logs/"
@@ -100,11 +100,11 @@ func getStartFile(serverLocation, screenName string) (bool, string) {
 	if os.IsNotExist(err) {
 		util.LogError("This server has no 'run.sh' file specified.\n" + 
 					  "Please create this file in the root directory of the server with the command to start.")
-		pause()
+		util.Pause()
 		return false, err.Error()
 	} else if err != nil {
 		util.LogError("An unexpected error occured opening 'run.sh' of this server:\n" + err.Error())
-		pause()
+		util.Pause()
 		return false, err.Error()
 	}
 	return true, startfile
@@ -115,7 +115,7 @@ func getStartFile(serverLocation, screenName string) (bool, string) {
 func StartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop bool) {
 	if ok, _ := SliceContainsServer(screens, screen); ok {
 		util.LogError("Screen '" + screen.Name + "' is still running!")
-		pause()
+		util.Pause()
 		return
 	}
 
@@ -144,7 +144,7 @@ func StartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop
 func StopScreen(screen *Screen, screens *[]Screen, config *util.Conf) {
 	if ok, _ := SliceContainsServer(screens, screen); !ok {
 		util.LogError("Screen '" + screen.Name + "' is not running!")
-		pause()
+		util.Pause()
 		return
 	}
 
@@ -154,7 +154,7 @@ func StopScreen(screen *Screen, screens *[]Screen, config *util.Conf) {
 func ResumeScreen(screen *Screen, screens *[]Screen, config *util.Conf) {
 	if ok, _ := SliceContainsServer(screens, screen); !ok {
 		util.LogError("Screen '" + screen.Name + "' is not running!")
-		pause()
+		util.Pause()
 		return
 	}
 

@@ -1,17 +1,11 @@
 package core
 
 import (
-	"os"
-	"bufio"
 	"fmt"
 	. "strings"
 	. "strconv"
 	"github.com/zekroTJA/serverManager2/util"
 )
-
-func pause() {
-	bufio.NewReader(os.Stdin).ReadString('\n')
-}
 
 func printHelp() {
 	fmt.Println(
@@ -26,7 +20,7 @@ func printHelp() {
 		"\n config                   | Edit config of the program",
 		"\n exit                     | Exit the program",
 		"\n\nConfig File Location: " + util.CONFFILE + "\n")
-	pause()
+	util.Pause()
 }
 
 func fetchServer(servers *[]Screen, invoke string) *Screen {
@@ -79,6 +73,8 @@ func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Co
 		case "restart":
 			endless := (len(args) > 1 && args[1] == "e")
 			RestartScreen(server, screens, config, endless)
+		case "backup":
+			BackupMenu(server, config)
 		}
 	}
 }
