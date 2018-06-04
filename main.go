@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	. "strconv"
 	. "github.com/logrusorgru/aurora"
 	"time"
@@ -11,7 +12,7 @@ import (
 
 
 const (
-	VERSION = "2.4.0"
+	VERSION = "2.5.0"
 )
 
 func getRunningSince(timestr string) string {
@@ -23,9 +24,16 @@ func getRunningSince(timestr string) string {
 	return fmt.Sprintf("[%03d:%02d:%02d]", days, hours, mins)
 }
 
+func initLoggingPath() {
+	path := "/etc/servermanager/logs"
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		os.MkdirAll(path, os.ModePerm)
+	}
+}
 
 func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.Conf) string {
-	util.Cls()
+	//util.Cls()
 	fmt.Println(
 		"Server Manager v." + VERSION,
 		"\n(c) Ringo Hoffmann (zekro Development)",
@@ -51,6 +59,8 @@ func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.C
 
 func main() {
 	config := util.GetConf()
+
+	initLoggingPath()
 
 	var screens, servers *[]core.Screen
 

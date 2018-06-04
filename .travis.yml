@@ -5,12 +5,9 @@ go:
 
 script:
 - go build -o bin/build ./main.go
-- $HOME/gopath/bin/goveralls -service=travis-ci
+- go test
 
 before_install:
-- go get github.com/axw/gocov/gocov
-- go get github.com/mattn/goveralls
-- go get golang.org/x/tools/cmd/cover
 - sudo apt-get install screen
 
 deploy:

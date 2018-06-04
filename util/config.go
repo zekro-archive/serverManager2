@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"fmt"
-	"strings"
 	. "strings"
+	"strconv"
 	"io/ioutil"
 )
 
@@ -16,10 +16,11 @@ const CONFFILE = "/etc/servermanager/config.json"
 type Conf struct {
 	ServerLocation string `json:"serverLocation"`
 	BackupLocation string `json:"backupLocation"`
+	Logging        int    `json:"enableLogging"`
 }
 
 func cutSlashAtBack(a string) string {
-	if strings.HasSuffix(a, "/") {
+	if HasSuffix(a, "/") {
 		a = a[0:len(a) - 1]
 	}
 	return a
@@ -47,8 +48,20 @@ func CreateConf(current *Conf) {
 	Cls()
 	fmt.Printf("\nCONFIG EDITOR\n\nPlease only use total paths!\n\n")
 	
-	current.ServerLocation = cutSlashAtBack(Cinpt("serverLocation (current \"" + current.ServerLocation + "\"):\n> "))
-	current.BackupLocation = cutSlashAtBack(Cinpt("backupLocation: (current \"" + current.BackupLocation + "\"):\n> "))
+	current.ServerLocation = cutSlashAtBack(Cinpt("serverLocation (current \"" + current.ServerLocation + "\") [Path]:\n> "))
+	current.BackupLocation = cutSlashAtBack(Cinpt("backupLocation: (current \"" + current.BackupLocation + "\") [Path]:\n> "))
+	current.Logging = func()int {
+		for {
+			inpt := Cinpt(fmt.Sprintf("enableLogging: (current \"%d\") [0/1]:\n> ", current.Logging))
+			if inpt == "0" || inpt == "1" {
+				res, err := strconv.Atoi(inpt)
+				if err == nil {
+					return res
+				}
+			}
+			LogError("Enter a valid value for 'enableLogging' [0/1]!")
+		}
+	}()
 
 	bjson, _ := json.MarshalIndent(current, "", "  ")
 
