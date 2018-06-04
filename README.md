@@ -18,14 +18,20 @@ List, start, stop, restart, resume and packup them.
 
 Download the release binary of the tool for your system [**here**](https://github.com/zekroTJA/serverManager2/releases) or compile it by yourself:
 
-
-> Go installation is required for this!  
+> Go installation is required for this!
 > You can download it [here](https://golang.org/dl/).
+
+You can use the automatic script for building and installing:
 ```
-$ git clone https://github.com/zekroTJA/serverManager2.git
-$ cd serverManager2
-$ go install github.com/logrusorgru/aurora
-$ go build -o servermanager src/github.com/zekrotja/serverManager2/*.go
+$ wget -s https://github.com/zekroTJA/serverManager2/blob/master/install.bash | bash
+```
+
+Or do it manually:
+```
+$ git clone https://github.com/zekroTJA/serverManager2.git src/github.com/zekroTJA/serverManager2
+$ export GOAPTH=$PWD
+$ go get github.com/logrusorgru/aurora
+$ go build -o /usr/bin/servermanager src/github.com/zekroTJA/serverManager2/main.go
 ```
 
 ---
@@ -47,10 +53,10 @@ exit | Exit the tool | Yes
 
 # To do
 
-- [ ] Exclude folders as servers beginnign with `_` or `.`
-- [ ] Started Before Timestamp
-- [ ] Restart command
 - [ ] Backup System
+- [x] Exclude folders as servers beginnign with `_` or `.`
+- [x] Started Before Timestamp
+- [x] Restart command
 - [x] Static Config + Config Editor / Setup menu setting up Config on Startup
 - [x] Start Command
 - [x] Stop Command

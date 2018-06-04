@@ -92,9 +92,9 @@ func TestGetSrceenBenchmark(test *testing.T) {
 `screen#GetServers() benchmark results:
   | Runs:                %d
   | Servers:             100
-  | Result:   | Min:     %d ms
-              | Max:     %d ms
-              | Average: %d ms`,
+  | Result:   | Min:     %d microseconds
+              | Max:     %d microseconds
+              | Average: %d microseconds`,
 	runs, 
 	min / 1000, 
 	max / 1000, 
