@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 )
 
+var LogLocation = "/etc/servermanager/logs/"
 
 type Screen struct {
 	Uid int
@@ -74,7 +75,7 @@ func createRunnerFile(path string) {
 }
 
 func setupLogging(path, screenName string) string {
-	logpath := "/etc/servermanager/logs/" + screenName
+	logpath := LogLocation + screenName
 	_, err := os.Stat(logpath)
 	if os.IsNotExist(err) {
 		os.MkdirAll(logpath, os.ModePerm)
@@ -97,11 +98,11 @@ func getStartFile(serverLocation, screenName string) (bool, string) {
 		util.LogError("This server has no 'run.sh' file specified.\n" + 
 					  "Please create this file in the root directory of the server with the command to start.")
 		pause()
-		return false, ""
+		return false, err.Error()
 	} else if err != nil {
 		util.LogError("An unexpected error occured opening 'run.sh' of this server:\n" + err.Error())
 		pause()
-		return false, ""
+		return false, err.Error()
 	}
 	return true, startfile
 }
@@ -130,7 +131,7 @@ func StartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop
 		exec.Command("screen", "-dmS", screen.Name, "bash", location + "/.runner", startfile, location).Run()
 	} else {
 		if config.Logging > 0 {
-			fmt.Println(exec.Command("screen", "-dmLS", screen.Name, "-c", setupLogging(location, screen.Name),"bash", startfile, location).Output())
+			exec.Command("screen", "-dmLS", screen.Name, "-c", setupLogging(location, screen.Name),"bash", startfile, location).Run()
 			return
 		}
 		exec.Command("screen", "-dmS", screen.Name, "bash", startfile, location).Run()

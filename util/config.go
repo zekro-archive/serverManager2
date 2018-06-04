@@ -10,7 +10,7 @@ import (
 )
 
 
-const CONFFILE = "/etc/servermanager/config.json"
+var CONFFILE = "/etc/servermanager/config.json"
 
 
 type Conf struct {
@@ -26,7 +26,10 @@ func cutSlashAtBack(a string) string {
 	return a
 }
 
-func GetConf() *Conf {
+func GetConf(loc ...string) *Conf {
+	if len(loc) > 0 {
+		CONFFILE = loc[0]
+	}
 	f, err := os.Open(CONFFILE)
 	if os.IsNotExist(err) {
 		newconf := Conf {}
@@ -58,6 +61,9 @@ func CreateConf(current *Conf) {
 				if err == nil {
 					return res
 				}
+			}
+			if inpt == "" {
+				return 0
 			}
 			LogError("Enter a valid value for 'enableLogging' [0/1]!")
 		}
