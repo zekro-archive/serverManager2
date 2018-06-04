@@ -12,7 +12,7 @@ import (
 
 
 const (
-	VERSION = "2.5.0"
+	VERSION = "2.5.1"
 )
 
 func getRunningSince(timestr string) string {
@@ -33,7 +33,7 @@ func initLoggingPath() {
 }
 
 func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.Conf) string {
-	//util.Cls()
+	util.Cls()
 	fmt.Println(
 		"Server Manager v." + VERSION,
 		"\n(c) Ringo Hoffmann (zekro Development)",
