@@ -23,7 +23,7 @@ Download the release binary of the tool for your system [**here**](https://githu
 
 You can use the automatic script for building and installing:
 ```
-$ wget -s https://github.com/zekroTJA/serverManager2/blob/master/install.bash | bash
+$ wget -s https://raw.githubusercontent.com/zekroTJA/serverManager2/master/install.bash | bash
 ```
 
 Or do it manually:

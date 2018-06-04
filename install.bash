@@ -20,5 +20,5 @@ go get github.com/logrusorgru/aurora
 echo "Building and installing..."
 go build -o /usr/bin/servermanager src/github.com/zekroTJA/serverManager2/main.go
 echo "Cleaning up..."
-rm -r pck/ src/
+rm -r pkg/ src/
 echo "Installation finished: /usr/bin/servermanager"
