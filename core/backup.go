@@ -4,6 +4,8 @@ import (
 	"os"
 	"fmt"
 	"strings"
+	"strconv"
+	"errors"
 	"time"
 	"path/filepath"
 	"github.com/zekroTJA/serverManager2/util"
@@ -15,6 +17,8 @@ type Backup struct {
 	Date time.Time
 }
 
+// PRIVATE FUNCTIONS
+
 func getBackups(screen *Screen, location string) *[]Backup {
 	var out []Backup
 	_, err := os.Stat(location)
@@ -22,10 +26,9 @@ func getBackups(screen *Screen, location string) *[]Backup {
 		os.MkdirAll(location, os.ModePerm)
 	}
 	filepath.Walk(location, func(path string, info os.FileInfo, err error) error {
-		folder := strings.Replace(path, location, "", -1)
+		folder := strings.Replace(path, location + "/" + screen.Name, "", -1)
 		pstat, _ := os.Stat(path)
 		if pstat.Mode().IsDir() && len(strings.Split(folder, "/")) == 2 {
-			fmt.Println(path)
 			out = append(out, Backup {
 				folder,
 				path,
@@ -43,6 +46,29 @@ func columnize(cont string, csize int) string {
 	return cont + "                              "[0:csize-len(cont)]
 }
 
+func fetchBackupByInd(inpt string, backups *[]Backup) (*Backup, error) {
+	i, err := strconv.Atoi(inpt)
+	if err != nil {
+		return &Backup {}, err
+	}
+	if len(*backups) >= i {
+		return &Backup {}, errors.New("out of bounds")
+	}
+	return &(*backups)[i], nil
+}
+
+// PUBLIC FUNCTIONS
+
+func CreateBackup(screen *Screen, config *util.Conf, name string) {
+	util.CopyDir(
+		config.ServerLocation + "/" + screen.Name, 
+	    config.BackupLocation + "/" + screen.Name + "/" + name)
+}
+
+func DeleteBackup(backup *Backup) {
+	os.RemoveAll(backup.Path)
+}
+
 func BackupMenu(screen *Screen, config *util.Conf) {
 	if config.BackupLocation == "" {
 		util.LogError("Backup location is not set")
@@ -50,15 +76,33 @@ func BackupMenu(screen *Screen, config *util.Conf) {
 		return
 	}
 
-	for {
+	inpt := ""
+	for inpt != "exit" && inpt != "e" {
 		backups := getBackups(screen, config.BackupLocation)
 		
-			fmt.Println("NAME               DATE")
-			for _, e := range *backups {
-				fmt.Println(
-					columnize(e.Name, 17) + "  " + 
-					e.Date.Format(time.RFC850))
+		fmt.Println("INDEX  " + columnize("NAME", 17) + "  DATE")
+		for i, e := range *backups {
+			fmt.Println(
+				columnize(strconv.Itoa(i), 5) + "  " +
+				columnize(e.Name, 17) + "  " + 
+				e.Date.Format(time.RFC850))
+		}
+		inpt = util.Cinpt("\n> ")
+		inptsplit := strings.Split(inpt, " ")
+		invoke := inptsplit[0]
+		args := inptsplit[1:]
+
+		if len(args) > 0 {
+			tscreen, err := fetchBackupByInd(args[0], backups)
+			switch invoke {
+			case "create":
+				name := strings.Join(args, " ")
+				CreateBackup(screen, config, name)
+			case "delete":
+				if err == nil {
+					DeleteBackup(tscreen)
+				}
 			}
-			_ = util.Cinpt("\n> ")
+		}
 	}
 }

@@ -65,7 +65,7 @@ func main() {
 	var screens, servers *[]core.Screen
 
 	res := ""
-	for res != "exit" {
+	for res != "exit" && res != "e" {
 		screens = core.GetRunningScreens()
 		servers = core.GetServers(config.ServerLocation)
 		res = printScreens(screens, servers, config)
