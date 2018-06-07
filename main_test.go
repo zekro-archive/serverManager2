@@ -65,12 +65,12 @@ func TestBackup(t *testing.T) {
 	c.CreateBackup(testscreen, conf, "testbackup1")
 	u.LogInfo("Created backup")
 
-	backups := c.GetBackups(testscreen, config.BackupLocation)
+	backups := c.GetBackups(testscreen, conf.BackupLocation)
 	u.LogInfo(fmt.Sprintf("Got backups:\n%+v", backups))
 
 	testbackup := &(*backups)[0]
 
-	c.RevokeBackup(testbackup, config, config.ServerLocation + "/" + testscreen.Name, testscreen.Name, true)
+	c.RevokeBackup(testbackup, conf, conf.ServerLocation + "/" + testscreen.Name, testscreen.Name, true)
 	u.LogInfo("Backup restored")
 
 	c.DeleteBackup(testbackup)

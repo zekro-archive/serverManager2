@@ -4,7 +4,7 @@ go:
 - tip
 
 script:
-- go build -o bin/build ./main.go
+- go build -x -o bin/build ./main.go
 - bash serverTest.bash
 
 before_install:
