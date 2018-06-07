@@ -6,6 +6,7 @@
 # run script.
 # After, the actuall test will be run
 
+mkdir backups
 mkdir -p testservers/test{1..100}
 for ind in {1..100}
 do

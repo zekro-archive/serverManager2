@@ -16,16 +16,10 @@ func TestConfig(t *testing.T) {
 	fmt.Println()
 	u.LogInfo(fmt.Sprintf("Config successfully created: %+v", conf))
 	conf.ServerLocation = "./testservers"
+	conf.BackupLocation = "./backups"
 	conf.Logging = 1
 	u.LogInfo(fmt.Sprintf("Changed config for test:     %+v", conf))
 }
-
-// func TestLogger(t *testing.T) {
-// 	u.LogInfo("test")
-// 	u.LogError("test")
-// 	u.LogWarn("test")
-// }
-
 
 func TestScreen(t *testing.T) {
 	c.LogLocation = "./logs/"
@@ -62,6 +56,25 @@ func TestScreen(t *testing.T) {
 		c.GetRunningScreens(),
 		conf)
 	u.LogInfo("Stopped testserver")
+}
+
+func TestBackup(t *testing.T) {
+
+	testscreen := &c.Screen {0, "", "test1", ""}
+
+	c.CreateBackup(testscreen, conf, "testbackup1")
+	u.LogInfo("Created backup")
+
+	backups := c.GetBackups(testscreen, config.BackupLocation)
+	u.LogInfo(fmt.Sprintf("Got backups:\n%+v", backups))
+
+	testbackup := &(*backups)[0]
+
+	c.RevokeBackup(testbackup, config, config.ServerLocation + "/" + testscreen.Name, testscreen.Name, true)
+	u.LogInfo("Backup restored")
+
+	c.DeleteBackup(testbackup)
+	u.LogInfo("Backup deleted")
 }
 
 func TestGetSrceenBenchmark(test *testing.T) {
