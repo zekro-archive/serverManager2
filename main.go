@@ -12,7 +12,7 @@ import (
 
 
 const (
-	VERSION = "2.5.1"
+	VERSION = "2.6.0"
 )
 
 func getRunningSince(timestr string) string {
