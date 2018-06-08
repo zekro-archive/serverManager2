@@ -29,9 +29,9 @@ echo '{' \
      '}' > ./testconf.json
 
 echo "HELP MESSAGE:"
-./bin/build --help
+./bin/build --test --help
 echo "VERSION MESSAGE:"
-./bin/build -v
+./bin/build --test -v
 echo "STARTING SERVERS 1, 2 AND 3:"
 ./bin/build --test -s test1,test2,test3
 echo "STOPPING SERVERS 1, 2 AND 3:"
