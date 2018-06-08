@@ -14,9 +14,10 @@ type Args struct {
 	args    []string
 }
 
-// PRIVATE FUNCTIONS
+// PUBLIC FUNCTIONS
 
-func (self *Args) exists(invokes ...string) bool {
+
+func (self *Args) Exists(invokes ...string) bool {
 	for _, e := range self.args {
 		for _, inv := range invokes {
 			if e == inv {
@@ -27,7 +28,7 @@ func (self *Args) exists(invokes ...string) bool {
 	return false
 }
 
-func (self *Args) getValue(invokes ...string) (string, bool) {
+func (self *Args) GetValue(invokes ...string) (string, bool) {
 	for i, e := range self.args {
 		for _, inv := range invokes {
 			if e == inv && i+1 < len(self.args) {
@@ -38,7 +39,6 @@ func (self *Args) getValue(invokes ...string) (string, bool) {
 	return "", false
 }
 
-// PUBLIC FUNCTIONS
 
 func (self *Args) Init(servers *[]Screen, screens *[]Screen, config *util.Conf) bool {
 	self.args = os.Args
@@ -49,7 +49,7 @@ func (self *Args) Init(servers *[]Screen, screens *[]Screen, config *util.Conf) 
 }
 
 func (self *Args) Parse(version string) {
-	if self.exists("--help", "-h", "-?") {
+	if self.Exists("--help", "-h", "-?") {
 		fmt.Println(
 			"\n -s   --start      | Start (multiple) servers by NAME of the servers:" +
 			"\n                   | Usage: -s server1,server2,..." + 
@@ -60,18 +60,18 @@ func (self *Args) Parse(version string) {
 		return
 	}
 
-	if self.exists("--test") {
+	if self.Exists("--test") {
 		self.config = util.GetConf("./testconf.json")
 	}
 
-	if self.exists("-v", "--version") {
+	if self.Exists("-v", "--version") {
 		fmt.Println("ServerManager2 v." + version)
 		return
 	}
 
-	if v, ok := self.getValue("-s", "--start"); ok {
+	if v, ok := self.GetValue("-s", "--start"); ok {
 		toStart := Split(v, ",")
-		inLoop := self.exists("--loop")
+		inLoop := self.Exists("--loop")
 		for _, e := range toStart {
 			ok := StartScreen(
 				&Screen { Name: e }, 
@@ -89,7 +89,7 @@ func (self *Args) Parse(version string) {
 		return
 	}
 
-	if v, ok := self.getValue("-t", "--stop"); ok {
+	if v, ok := self.GetValue("-t", "--stop"); ok {
 		toStart := Split(v, ",")
 		for _, e := range toStart {
 			ok := StopScreen(
