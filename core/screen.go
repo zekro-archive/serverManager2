@@ -112,43 +112,46 @@ func getStartFile(serverLocation, screenName string) (bool, string) {
 
 // SCREEN ACTION FUNCTIONS
 
-func StartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop bool) {
+func StartScreen(screen *Screen, screens *[]Screen, config *util.Conf, runInLoop bool) bool {
+	var err error
 	if ok, _ := SliceContainsServer(screens, screen); ok {
 		util.LogError("Screen '" + screen.Name + "' is still running!")
 		util.Pause()
-		return
+		return false
 	}
 
 	location := config.ServerLocation + "/" + screen.Name
 	ok, startfile := getStartFile(config.ServerLocation, screen.Name)
 	if !ok {
-		return
+		return false
 	}
 
 	if runInLoop {
 		createRunnerFile(location)
 		if config.Logging > 0 {
-			exec.Command("screen", "-dmLS", screen.Name, "-c", setupLogging(location, screen.Name), "bash", location + "/.runner", startfile, location).Run()
-			return
+			err = exec.Command("screen", "-dmLS", screen.Name, "-c", setupLogging(location, screen.Name), "bash", location + "/.runner", startfile, location).Run()
+			return err == nil
 		}
-		exec.Command("screen", "-dmS", screen.Name, "bash", location + "/.runner", startfile, location).Run()
+		err = exec.Command("screen", "-dmS", screen.Name, "bash", location + "/.runner", startfile, location).Run()
 	} else {
 		if config.Logging > 0 {
-			exec.Command("screen", "-dmLS", screen.Name, "-c", setupLogging(location, screen.Name),"bash", startfile, location).Run()
-			return
+			err = exec.Command("screen", "-dmLS", screen.Name, "-c", setupLogging(location, screen.Name),"bash", startfile, location).Run()
+			return err == nil
 		}
-		exec.Command("screen", "-dmS", screen.Name, "bash", startfile, location).Run()
+		err = exec.Command("screen", "-dmS", screen.Name, "bash", startfile, location).Run()
 	}
+	return err == nil
 }
 
-func StopScreen(screen *Screen, screens *[]Screen, config *util.Conf) {
+func StopScreen(screen *Screen, screens *[]Screen, config *util.Conf) bool {
 	if ok, _ := SliceContainsServer(screens, screen); !ok {
 		util.LogError("Screen '" + screen.Name + "' is not running!")
 		util.Pause()
-		return
+		return false
 	}
 
-	exec.Command("screen", "-XS", screen.Name, "quit").Run()
+	err := exec.Command("screen", "-XS", screen.Name, "quit").Run()
+	return err == nil
 }
 
 func ResumeScreen(screen *Screen, screens *[]Screen, config *util.Conf) {

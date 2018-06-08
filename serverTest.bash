@@ -18,3 +18,18 @@ echo "SET UP TEST ENVOREMENT"
 echo "STARTING TEST..."
 
 go test
+
+echo "TESTING COMMAND LINE ARGS"
+
+echo "HELP MESSAGE:"
+./bin/build --help
+echo "VERSION MESSAGE:"
+./bin/build -v
+echo "STARTING SERVERS 1, 2 AND 3:"
+./bin/build --test -s test1,test2,test3
+echo "STOPPING SERVERS 1, 2 AND 3:"
+./bin/build --test -t test1,test2,test3
+echo "STARTING SERVERS 1, 2 AND 3 IN LOOP MODE:"
+./bin/build --test -s test1,test2,test3 --loop
+echo "STOPPING SERVERS 1, 2 AND 3:"
+./bin/build --test -t test1,test2,test3

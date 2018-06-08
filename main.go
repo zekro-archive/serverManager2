@@ -12,7 +12,7 @@ import (
 
 
 const (
-	VERSION = "2.6.0"
+	VERSION = "2.7.0"
 )
 
 func getRunningSince(timestr string) string {
@@ -58,6 +58,8 @@ func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.C
 }
 
 func main() {
+
+	args := &core.Args {}
 	config := util.GetConf()
 
 	initLoggingPath()
@@ -68,6 +70,10 @@ func main() {
 	for res != "exit" && res != "e" {
 		screens = core.GetRunningScreens()
 		servers = core.GetServers(config.ServerLocation)
+		if args.Init(servers, screens, config) {
+			args.Parse(VERSION)
+			return
+		}
 		res = printScreens(screens, servers, config)
 		core.HandleCmd(res, screens, servers, config)
 	}
