@@ -21,6 +21,13 @@ go test
 
 echo "TESTING COMMAND LINE ARGS"
 
+echo "CREATING TEST CONFIG..."
+echo '{' \
+     '"serverLocation": "./testservers",' \
+     '"backupLocation": "./backups",' \
+     '"enableLogging": 1' \
+     '}' > ./testconf.json
+
 echo "HELP MESSAGE:"
 ./bin/build --help
 echo "VERSION MESSAGE:"
