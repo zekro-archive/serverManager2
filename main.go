@@ -60,7 +60,20 @@ func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.C
 func main() {
 
 	args := &core.Args {}
-	config := util.GetConf()
+	testing := false
+	for _, e := range os.Args {
+		if e == "--test" {
+			testing = true
+		}
+	}
+
+	var config *util.Conf
+
+	if testing {
+		config = util.GetConf("./testconf.json")
+	} else {
+		config = util.GetConf()
+	}
 
 	initLoggingPath()
 

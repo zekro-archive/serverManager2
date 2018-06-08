@@ -27,8 +27,6 @@ echo '{' \
      '"backupLocation": "./backups",' \
      '"enableLogging": 1' \
      '}' > ./testconf.json
-mkdir -p /etc/servermanager
-cp ./testconf.json /etc/servermanager/config.json
 
 echo "HELP MESSAGE:"
 ./bin/build --help
