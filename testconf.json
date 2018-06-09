@@ -1,0 +1,1 @@
+{ "serverLocation": "./testservers", "backupLocation": "./backups", "enableLogging": 1 }
