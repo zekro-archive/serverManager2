@@ -28,15 +28,17 @@ echo '{' \
      '"enableLogging": 1' \
      '}' > ./testconf.json
 
+ls -lisah
+
 echo "HELP MESSAGE:"
 ./bin/build --test --help
 echo "VERSION MESSAGE:"
 ./bin/build --test -v
-echo "STARTING SERVERS 1, 2 AND 3:"
-./bin/build --test -s test1,test2,test3
-echo "STOPPING SERVERS 1, 2 AND 3:"
-./bin/build --test -t test1,test2,test3
-echo "STARTING SERVERS 1, 2 AND 3 IN LOOP MODE:"
-./bin/build --test -s test1,test2,test3 --loop
-echo "STOPPING SERVERS 1, 2 AND 3:"
-./bin/build --test -t test1,test2,test3
+echo "STARTING SERVERS 10, 11 AND 12:"
+./bin/build --test -s test10,test11,test12
+echo "STOPPING SERVERS 10, 11 AND 12:"
+./bin/build --test -t test10,test11,test12
+echo "STARTING SERVERS 10, 11 AND 12 IN LOOP MODE:"
+./bin/build --test -s test10,test11,test12 --loop
+echo "STOPPING SERVERS 10, 11 AND 12:"
+./bin/build --test -t test10,test11,test12
