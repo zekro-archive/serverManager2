@@ -62,6 +62,8 @@ func (self *Args) Parse(version string) {
 
 	if self.Exists("--test") {
 		self.config = util.GetConf("./testconf.json")
+		util.LogInfo(
+			fmt.Sprintf("Used Config: %+v", self.config))
 	}
 
 	if self.Exists("-v", "--version") {

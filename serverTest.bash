@@ -28,6 +28,8 @@ echo '{' \
      '"enableLogging": 1' \
      '}' > ./testconf.json
 
+ls -lisah
+
 echo "HELP MESSAGE:"
 ./bin/build --test --help
 echo "VERSION MESSAGE:"
