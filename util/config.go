@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"os"
+	"os/exec"
 	"fmt"
 	. "strings"
 	"strconv"
@@ -17,6 +18,13 @@ type Conf struct {
 	ServerLocation string `json:"serverLocation"`
 	BackupLocation string `json:"backupLocation"`
 	Logging        int    `json:"enableLogging"`
+}
+
+func dontChangeIfEnter(inpt string, def string) string {
+	if inpt == "" {
+		return def
+	}
+	return inpt
 }
 
 func cutSlashAtBack(a string) string {
@@ -51,8 +59,12 @@ func CreateConf(current *Conf) {
 	Cls()
 	fmt.Printf("\nCONFIG EDITOR\n\nPlease only use total paths!\n\n")
 	
-	current.ServerLocation = cutSlashAtBack(Cinpt("serverLocation (current \"" + current.ServerLocation + "\") [Path]:\n> "))
-	current.BackupLocation = cutSlashAtBack(Cinpt("backupLocation: (current \"" + current.BackupLocation + "\") [Path]:\n> "))
+	current.ServerLocation = cutSlashAtBack(
+		dontChangeIfEnter(
+			Cinpt("serverLocation (current \"" + current.ServerLocation + "\") [Path]:\n> "), current.ServerLocation))
+	current.BackupLocation = cutSlashAtBack(
+		dontChangeIfEnter(
+			Cinpt("backupLocation: (current \"" + current.BackupLocation + "\") [Path]:\n> "), current.BackupLocation))
 	current.Logging = func()int {
 		for {
 			inpt := Cinpt(fmt.Sprintf("enableLogging: (current \"%d\") [0/1]:\n> ", current.Logging))
@@ -63,7 +75,7 @@ func CreateConf(current *Conf) {
 				}
 			}
 			if inpt == "" {
-				return 0
+				return current.Logging
 			}
 			LogError("Enter a valid value for 'enableLogging' [0/1]!")
 		}
@@ -81,4 +93,16 @@ func CreateConf(current *Conf) {
 	if err != nil {
 		LogFatal("Failed creating config file:\n" + err.Error())
 	}
+}
+
+func EditConfWithEditor(config *Conf, editor string) {
+	cmd := exec.Command(editor, CONFFILE)
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Run()
+
+	newConf := GetConf()
+	config.ServerLocation = newConf.ServerLocation
+	config.BackupLocation = newConf.BackupLocation
+	config.Logging =        newConf.Logging
 }

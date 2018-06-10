@@ -75,6 +75,8 @@ func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Co
 			RestartScreen(server, screens, config, endless)
 		case "backup":
 			BackupMenu(server, config)
+		case "config":
+			util.EditConfWithEditor(config, args[0])
 		}
 	}
 }
