@@ -1,8 +1,9 @@
  <div align="center">
      <h1>~ ServerManager2 ~</h1>
      <strong>faster, harder, stronger</strong><br><br>
-     <img src="https://forthebadge.com/images/badges/made-with-go.svg" height="30"/>&nbsp;
-     <img src="https://forthebadge.com/images/badges/powered-by-jeffs-keyboard.svg" height="30" />
+     <img src="https://forthebadge.com/images/badges/made-with-go.svg" height="25"/>&nbsp;
+     <img src="https://forthebadge.com/images/badges/powered-by-jeffs-keyboard.svg" height="25" />
+     <br>
      <br>
      <a href="https://travis-ci.org/zekroTJA/serverManager2"><img src="https://travis-ci.org/zekroTJA/serverManager2.svg?branch=master"/></a>&nbsp;
      <a href="https://github.com/zekroTJA/serverManager2/releases"><img src="https://img.shields.io/github/release/zekroTJA/serverManager2/all.svg"/></a>
