@@ -12,7 +12,7 @@ import (
 
 
 const (
-	VERSION = "2.8.1"
+	VERSION = "2.9.0"
 )
 
 func getRunningSince(timestr string) string {
@@ -58,6 +58,9 @@ func printScreens(screens *[]core.Screen, servers *[]core.Screen, config *util.C
 }
 
 func main() {
+
+	// fmt.Println(core.GetAutostart())
+	// return
 
 	args := &core.Args {}
 	testing := false

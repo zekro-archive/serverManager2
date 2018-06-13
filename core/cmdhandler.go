@@ -25,22 +25,31 @@ func printHelp() {
 	util.Pause()
 }
 
-func fetchServer(servers *[]Screen, invoke string) *Screen {
+func fetchServer(servers *[]Screen, invoke string) (*Screen, bool) {
 	invoke = ToLower(invoke)
 	for _, e := range *servers {
 		invokei, err := Atoi(invoke)
 		if err == nil && e.Uid == invokei {
-			return &e
+			return &e, true
 		} else if ToLower(e.Name) == invoke {
-			return &e
+			return &e, true
 		}
 	}
 	for _, e := range *servers {
 		if HasPrefix(ToLower(e.Name), invoke) {
-			return &e
+			return &e, true
 		}
 	}
-	return &Screen {}
+	return &Screen{}, false
+}
+
+func testIfFetchSuccessfull(invoke string, ok bool, cb func()) {
+	if !ok {
+		util.LogError("Can not fetch '" + invoke + "' to any server")
+		util.Pause()
+	} else {
+		cb()
+	}
 }
 
 func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Conf ) {
@@ -56,29 +65,80 @@ func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Co
 			printHelp()
 		case "config":
 			util.CreateConf(config)
+		case "autostart":
+			aservers, stat := GetAutostart()
+			switch stat {
+			case ERR_PATH_NOT_EXIST:
+				util.LogError("Autostart path '/etc/init.d' can not be found!")
+			case ERR_FILE_NOT_EXIST:
+				util.LogWarn("Autostart entry not created yet.")
+			case ERR_READ:
+				util.LogError("An unexpected error occured while reading file.")
+			default:
+				util.LogInfo("Current servers in autostart: " + aservers)
+			}
+			util.Pause()
 		}
 
 	default:
-		server := fetchServer(servers, args[0])
-		if server == (&Screen {}) {
-			util.LogError("Can not fetch '" + args[0] + "' to any server")
-			return
-		}
+		server, ok := fetchServer(servers, args[0])
+		// if !ok {
+		// 	util.LogError("Can not fetch '" + args[0] + "' to any server")
+		// 	return
+		// }
 		switch invoke {
 		case "start":
-			endless := (len(args) > 1 && args[1] == "e")
-			StartScreen(server, screens, config, endless)
+			testIfFetchSuccessfull(args[0], ok, func() {
+				endless := (len(args) > 1 && args[1] == "e")
+				StartScreen(server, screens, config, endless)
+			})
 		case "stop":
-			StopScreen(server, screens, config)
+			testIfFetchSuccessfull(args[0], ok, func() {
+				StopScreen(server, screens, config)
+			})
 		case "resume":
-			ResumeScreen(server, screens, config)
+			testIfFetchSuccessfull(args[0], ok, func() {
+				ResumeScreen(server, screens, config)
+			})
 		case "restart":
-			endless := (len(args) > 1 && args[1] == "e")
-			RestartScreen(server, screens, config, endless)
+			testIfFetchSuccessfull(args[0], ok, func() {
+				endless := (len(args) > 1 && args[1] == "e")
+				RestartScreen(server, screens, config, endless)
+			})
 		case "backup":
-			BackupMenu(server, config)
+			testIfFetchSuccessfull(args[0], ok, func() {
+				BackupMenu(server, config)
+			})
 		case "config":
 			util.EditConfWithEditor(config, args[0])
+		case "autostart":
+			if args[0] == "reset" {
+				if err := ResetAutostart(); err != nil {
+					util.LogError("Failed deleting autostart file:\n" + err.Error())
+				} else {
+					util.LogInfo("Reset autostart.")
+				}
+				util.Pause()
+				return
+			}
+			var selected []Screen
+			for _, e := range args {
+				if s, ok := fetchServer(servers, e); ok {
+					selected = append(selected, *s)
+				}
+			}
+			if len(selected) == 0 {
+				util.LogError("No servers selected")
+				util.Pause()
+				return
+			}
+			err := CreateAutostart(&selected)
+			if err == nil {
+				util.LogInfo("Successfully added servers to autostart")
+			} else {
+				util.LogError("An unexpected error occured while creating autostart file:\n" + err.Error())
+			}
+			util.Pause()
 		}
 	}
 }
