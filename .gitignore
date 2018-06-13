@@ -9,3 +9,4 @@
 pkg/*
 src/github.com/logrusorgru/*              
 screenlog.*
+testconf.json
