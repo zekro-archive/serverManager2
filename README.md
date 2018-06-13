@@ -58,7 +58,7 @@ exit | Exit the tool | Yes
 
 # To do
 
-- [ ] option to add servers to start with system boot
+- [ ] option to add servers to start with system boot **`[needs to be tested]`**
 - [x] Backup System
 - [x] Exclude folders as servers beginnign with `_` or `.`
 - [x] Started Before Timestamp
