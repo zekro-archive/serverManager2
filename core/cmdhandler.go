@@ -17,7 +17,9 @@ func printHelp() {
 		"\n restart <index/name> [e] | Restart a server",
 		"\n                          | Use 'e' as argument as same as with the start cmd",
 		"\n backup <index/name>      | Start backup manager for specific server",
-		"\n config                   | Edit config of the program",
+		"\n config (<editor>)        | Edit config of the program",
+		"\n                          | If you pass the editor, you can edit the config in the editor",
+		"\n                          | Example: 'config nano'",
 		"\n exit                     | Exit the program",
 		"\n\nConfig File Location: " + util.CONFFILE + "\n")
 	util.Pause()
