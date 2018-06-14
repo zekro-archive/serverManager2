@@ -6,6 +6,7 @@
      <br>
      <br>
      <a href="https://travis-ci.org/zekroTJA/serverManager2"><img src="https://travis-ci.org/zekroTJA/serverManager2.svg?branch=master"/></a>&nbsp;
+     <a href="https://zekro.de/jenkins/job/serverManager2"><img src="https://zekro.de/api/jenkins/badge/?root=https://zekro.de/jenkins&project=serverManager2"/></a>&nbsp;
      <a class="badge-align" href="https://www.codacy.com/app/zekroTJA/serverManager2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zekroTJA/serverManager2&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/a0d09c2e78f748e2ab81a236baeb5b44"/></a>&nbsp;
      <a href="https://github.com/zekroTJA/serverManager2/releases"><img src="https://img.shields.io/github/release/zekroTJA/serverManager2/all.svg"/></a>
  </div>
