@@ -1,8 +1,8 @@
 package util
 
 import (
-	"fmt"
 	"bufio"
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -20,7 +20,7 @@ func Cinpt(msg string) string {
 	if err != nil {
 		return ""
 	}
-	return text[0:len(text)-1]
+	return text[0 : len(text)-1]
 }
 
 func Pause() {

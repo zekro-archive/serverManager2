@@ -1,18 +1,19 @@
 package core
 
 import (
-	"os"
-	. "strings"
-	"io/ioutil"
 	"errors"
 	"fmt"
-	"github.com/zekroTJA/serverManager2/util"
+	"io/ioutil"
+	"os"
+	. "strings"
+
+	"../util"
 )
 
 var AUTOSTARTFILE = "/etc/init.d/servermanager_scedule"
 
 const (
-	ERR_NULL 			= iota
+	ERR_NULL = iota
 	ERR_PATH_NOT_EXIST
 	ERR_FILE_NOT_EXIST
 	ERR_READ
@@ -47,12 +48,12 @@ func CreateAutostart(servers *[]Screen) error {
 	}
 	var _servers []string
 	for _, s := range *servers {
-		_servers = append(_servers, s.Name) 
+		_servers = append(_servers, s.Name)
 	}
 	out := fmt.Sprintf(
-		"#!/bin/bash\n\n" +
-		"# SERVERS: %s\n\n" +
-		"%s -s %s --loop", Join(_servers, ","), os.Args[0], Join(_servers, ","))
+		"#!/bin/bash\n\n"+
+			"# SERVERS: %s\n\n"+
+			"%s -s %s --loop", Join(_servers, ","), os.Args[0], Join(_servers, ","))
 	err := ioutil.WriteFile(AUTOSTARTFILE, []byte(out), 0777)
 	return err
 }

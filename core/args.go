@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 	. "strings"
-	"github.com/zekroTJA/serverManager2/util"
+
+	"../util"
 )
 
 type Args struct {
@@ -15,7 +16,6 @@ type Args struct {
 }
 
 // PUBLIC FUNCTIONS
-
 
 func (self *Args) Exists(invokes ...string) bool {
 	for _, e := range self.args {
@@ -39,7 +39,6 @@ func (self *Args) GetValue(invokes ...string) (string, bool) {
 	return "", false
 }
 
-
 func (self *Args) Init(servers *[]Screen, screens *[]Screen, config *util.Conf) bool {
 	self.args = os.Args
 	self.config = config
@@ -52,11 +51,11 @@ func (self *Args) Parse(version string) {
 	if self.Exists("--help", "-h", "-?") {
 		fmt.Println(
 			"\n -s   --start      | Start (multiple) servers by NAME of the servers:" +
-			"\n                   | Usage: -s server1,server2,..." + 
-			"\n      --loop       | Use in combination with 'start' to start servers in loop" +
-			"\n -t   --stop       | Stop (multiple) servers by NAME of the servers:" + 
-			"\n                   | Usage: -t server1,server2,..." + 
-			"\n -v   --version    | Get current programs version\n")
+				"\n                   | Usage: -s server1,server2,..." +
+				"\n      --loop       | Use in combination with 'start' to start servers in loop" +
+				"\n -t   --stop       | Stop (multiple) servers by NAME of the servers:" +
+				"\n                   | Usage: -t server1,server2,..." +
+				"\n -v   --version    | Get current programs version\n")
 		return
 	}
 
@@ -76,7 +75,7 @@ func (self *Args) Parse(version string) {
 		inLoop := self.Exists("--loop")
 		for _, e := range toStart {
 			ok := StartScreen(
-				&Screen { Name: e }, 
+				&Screen{Name: e},
 				self.screens,
 				self.config,
 				inLoop)
@@ -95,9 +94,9 @@ func (self *Args) Parse(version string) {
 		toStart := Split(v, ",")
 		for _, e := range toStart {
 			ok := StopScreen(
-				&Screen { Name: e }, 
+				&Screen{Name: e},
 				self.screens,
-				self.config) 
+				self.config)
 			if ok {
 				util.LogInfo(
 					fmt.Sprintf("Stopped server '%s'", e))

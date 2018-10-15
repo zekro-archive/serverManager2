@@ -1,20 +1,20 @@
 package core
 
 import (
-	"os"
-	"fmt"
-	"strings"
-	"strconv"
 	"errors"
-	"time"
+	"fmt"
+	"os"
 	"path/filepath"
-	"github.com/zekroTJA/serverManager2/util"
-)
+	"strconv"
+	"strings"
+	"time"
 
+	"../util"
+)
 
 type Backup struct {
 	Name, Path string
-	Date time.Time
+	Date       time.Time
 }
 
 // PRIVATE FUNCTIONS
@@ -29,16 +29,15 @@ func columnize(cont string, csize int) string {
 func fetchBackupByInd(inpt string, backups *[]Backup) (*Backup, error) {
 	i, err := strconv.Atoi(inpt)
 	if err != nil {
-		return &Backup {}, err
+		return &Backup{}, err
 	}
 	if len(*backups) <= i {
-		return &Backup {}, errors.New("out of bounds")
+		return &Backup{}, errors.New("out of bounds")
 	}
 	return &(*backups)[i], nil
 }
 
 // PUBLIC FUNCTIONS
-
 
 func GetBackups(screen *Screen, location string) *[]Backup {
 	var out []Backup
@@ -47,13 +46,13 @@ func GetBackups(screen *Screen, location string) *[]Backup {
 		os.MkdirAll(location, os.ModePerm)
 	}
 	filepath.Walk(location, func(path string, info os.FileInfo, err error) error {
-		folder := strings.Replace(path, location + "/" + screen.Name, "", -1)
+		folder := strings.Replace(path, location+"/"+screen.Name, "", -1)
 		pstat, _ := os.Stat(path)
 		if pstat.Mode().IsDir() && len(strings.Split(folder, "/")) == 2 {
-			out = append(out, Backup {
+			out = append(out, Backup{
 				folder,
 				path,
-				pstat.ModTime() })
+				pstat.ModTime()})
 		}
 		return err
 	})
@@ -62,8 +61,8 @@ func GetBackups(screen *Screen, location string) *[]Backup {
 
 func CreateBackup(screen *Screen, config *util.Conf, name string) {
 	util.CopyDir(
-		config.ServerLocation + "/" + screen.Name, 
-	    config.BackupLocation + "/" + screen.Name + "/" + name)
+		config.ServerLocation+"/"+screen.Name,
+		config.BackupLocation+"/"+screen.Name+"/"+name)
 }
 
 func DeleteBackup(backup *Backup) {
@@ -73,12 +72,12 @@ func DeleteBackup(backup *Backup) {
 func RevokeBackup(backup *Backup, config *util.Conf, path, name string, yes bool) {
 	res := util.Cinpt(
 		"ATTENTION:\nBefore restoring, current live state will be saved as backup here.\n" +
-		"Also, the server should be shut down before restoring a backup!\n" +
-		"Do you really want to restore? [yN]: ")
+			"Also, the server should be shut down before restoring a backup!\n" +
+			"Do you really want to restore? [yN]: ")
 	if strings.ToLower(res) == "y" || yes {
 		util.CopyDir(
-			config.ServerLocation + "/" + name, 
-			config.BackupLocation + "/" + name + "/AUTO_" + time.Now().Format("02-01-06_15-04-05"))
+			config.ServerLocation+"/"+name,
+			config.BackupLocation+"/"+name+"/AUTO_"+time.Now().Format("02-01-06_15-04-05"))
 		os.RemoveAll(path)
 		util.CopyDir(
 			backup.Path,
@@ -96,16 +95,16 @@ func BackupMenu(screen *Screen, config *util.Conf) {
 	inpt := ""
 	for inpt != "exit" && inpt != "e" {
 		backups := GetBackups(screen, config.BackupLocation)
-		
+
 		util.Cls()
 		fmt.Println(
 			"BACKUP MANAGER - SCREEN: " + screen.Name + "\n\n" +
-			"INDEX  " + columnize("NAME", 17) + "  DATE")
+				"INDEX  " + columnize("NAME", 17) + "  DATE")
 		for i, e := range *backups {
 			fmt.Println(
 				columnize(strconv.Itoa(i), 5) + "  " +
-				columnize(e.Name, 17) + "  " + 
-				e.Date.Format(time.RFC850))
+					columnize(e.Name, 17) + "  " +
+					e.Date.Format(time.RFC850))
 		}
 		inpt = util.Cinpt("\nbackup > ")
 		inptsplit := strings.Split(inpt, " ")
@@ -114,9 +113,9 @@ func BackupMenu(screen *Screen, config *util.Conf) {
 
 		if invoke == "help" {
 			fmt.Println(
-				"\n create <name>   | Create a backup with the given name" + 
-				"\n delete <index>  | Delete backup by index" + 
-			    "\n restore <index> | Restore a backup to live server\n")
+				"\n create <name>   | Create a backup with the given name" +
+					"\n delete <index>  | Delete backup by index" +
+					"\n restore <index> | Restore a backup to live server\n")
 			util.Cinpt("[Enter to continue...]")
 			continue
 		}
@@ -134,9 +133,9 @@ func BackupMenu(screen *Screen, config *util.Conf) {
 					util.LogError(err.Error())
 					util.Cinpt("[Enter to continue...]")
 				}
-			case "restore": 
+			case "restore":
 				if err == nil {
-					RevokeBackup(tbackup, config, config.ServerLocation + "/" + screen.Name, screen.Name, false)
+					RevokeBackup(tbackup, config, config.ServerLocation+"/"+screen.Name, screen.Name, false)
 				} else {
 					util.LogError(err.Error())
 					util.Cinpt("[Enter to continue...]")

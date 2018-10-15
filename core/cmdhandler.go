@@ -2,9 +2,10 @@ package core
 
 import (
 	"fmt"
-	. "strings"
 	. "strconv"
-	"github.com/zekroTJA/serverManager2/util"
+	. "strings"
+
+	"../util"
 )
 
 func printHelp() {
@@ -21,7 +22,7 @@ func printHelp() {
 		"\n                          | If you pass the editor, you can edit the config in the editor",
 		"\n                          | Example: 'config nano'",
 		"\n exit                     | Exit the program",
-		"\n\nConfig File Location: " + util.CONFFILE + "\n")
+		"\n\nConfig File Location: "+util.CONFFILE+"\n")
 	util.Pause()
 }
 
@@ -52,7 +53,7 @@ func testIfFetchSuccessfull(invoke string, ok bool, cb func()) {
 	}
 }
 
-func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Conf ) {
+func HandleCmd(cmd string, screens *[]Screen, servers *[]Screen, config *util.Conf) {
 	cmdsplit := Split(cmd, " ")
 	invoke := cmdsplit[0]
 	args := cmdsplit[1:]

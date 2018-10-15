@@ -2,17 +2,15 @@ package util
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
-	"fmt"
-	. "strings"
 	"strconv"
-	"io/ioutil"
+	. "strings"
 )
 
-
 var CONFFILE = "/etc/servermanager/config.json"
-
 
 type Conf struct {
 	ServerLocation string `json:"serverLocation"`
@@ -29,7 +27,7 @@ func dontChangeIfEnter(inpt string, def string) string {
 
 func cutSlashAtBack(a string) string {
 	if HasSuffix(a, "/") {
-		a = a[0:len(a) - 1]
+		a = a[0 : len(a)-1]
 	}
 	return a
 }
@@ -40,7 +38,7 @@ func GetConf(loc ...string) *Conf {
 	}
 	f, err := os.Open(CONFFILE)
 	if os.IsNotExist(err) {
-		newconf := Conf {}
+		newconf := Conf{}
 		CreateConf(&newconf)
 		fmt.Println("LOC: " + newconf.ServerLocation)
 		return &newconf
@@ -50,7 +48,7 @@ func GetConf(loc ...string) *Conf {
 	defer f.Close()
 
 	decoder := json.NewDecoder(f)
-	config := Conf {}
+	config := Conf{}
 	decoder.Decode(&config)
 	return &config
 }
@@ -58,14 +56,14 @@ func GetConf(loc ...string) *Conf {
 func CreateConf(current *Conf) {
 	Cls()
 	fmt.Printf("\nCONFIG EDITOR\n\nPlease only use total paths!\n\n")
-	
+
 	current.ServerLocation = cutSlashAtBack(
 		dontChangeIfEnter(
-			Cinpt("serverLocation (current \"" + current.ServerLocation + "\") [Path]:\n> "), current.ServerLocation))
+			Cinpt("serverLocation (current \""+current.ServerLocation+"\") [Path]:\n> "), current.ServerLocation))
 	current.BackupLocation = cutSlashAtBack(
 		dontChangeIfEnter(
-			Cinpt("backupLocation: (current \"" + current.BackupLocation + "\") [Path]:\n> "), current.BackupLocation))
-	current.Logging = func()int {
+			Cinpt("backupLocation: (current \""+current.BackupLocation+"\") [Path]:\n> "), current.BackupLocation))
+	current.Logging = func() int {
 		for {
 			inpt := Cinpt(fmt.Sprintf("enableLogging: (current \"%d\") [0/1]:\n> ", current.Logging))
 			if inpt == "0" || inpt == "1" {
@@ -87,7 +85,12 @@ func CreateConf(current *Conf) {
 	path := Join(pathsplit[0:len(pathsplit)-1], "/")
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		os.MkdirAll(path, os.ModePerm)
+		err := os.MkdirAll(path, os.ModePerm)
+		if err != nil {
+			LogFatal("Failed creating config file path:\n" + err.Error())
+		}
+	} else if err != nil {
+		LogFatal("Failed creating config file path:\n" + err.Error())
 	}
 	err = ioutil.WriteFile(CONFFILE, bjson, 0644)
 	if err != nil {
@@ -104,5 +107,5 @@ func EditConfWithEditor(config *Conf, editor string) {
 	newConf := GetConf()
 	config.ServerLocation = newConf.ServerLocation
 	config.BackupLocation = newConf.BackupLocation
-	config.Logging =        newConf.Logging
+	config.Logging = newConf.Logging
 }
